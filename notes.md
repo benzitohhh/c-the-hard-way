@@ -23,18 +23,21 @@ To generate tags table:
 C
 *******
 
-   /usr/include   should contain the standard library header files (i.e. stdio.h etc)
+   Libraries:
 
-   /usr/lib       should contain the the standard library implementations.
+      Libraries are a bunch of object files, grouped together in a single file.
 
-   Static libaries have .a extension (i.e. libc.a, libm.a etc).
-   They are a collection of .o files (object files), grouped together
-   using the ar archiver utility.
+      /usr/lib       contains the standard libraries (i.e. libc.so, libc.a, libc.dylib etc..)
 
-   Dynamic libaries have .so extension (i.e. libc.so, etc...).
+      /usr/include   contains header files for the standrad libraries (i.e. stdio.h etc)
 
-   You can see which libraries have been dynamically linked by running:
-      ldd <executable>
+      Static libaries have .a extension (i.e. libc.a, libm.a etc).
+
+      Dynamic libaries have .so extension or .dylib on OSX (i.e. libc.so, libc.dylib etc..)
+
+      You can see which libraries have been dynamically linked by running:
+         ldd <executable>        # on Linux
+         otool -L <executable>   # on OSX
 
 
 Strings are just arrays of chars.
