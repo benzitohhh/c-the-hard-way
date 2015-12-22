@@ -13,3 +13,4 @@ book
 *~
 *.stackdump
 TAGS
+*.dSYM
