@@ -13,13 +13,13 @@ struct Person
 
 struct Person Person_create(char *name,int age, int height, int weight)
 {
-    // Here, we'll create the struct on the stack (usng the {} notation)
+    // Here, we'll create the struct on the stack (rather than on the heap with a pointer)
     
     // inline
     /* struct Person who = {.name = strdup(name), .age = age, .height = height, .weight = weight}; */
 
     // with assignment
-    struct Person who = {};
+    struct Person who;
     who.name = strdup(name);
     who.age = age;
     who.height = height;
@@ -27,14 +27,6 @@ struct Person Person_create(char *name,int age, int height, int weight)
         
     return who;
 }
-
-/* void Person_destroy(struct Person *who) */
-/* { */
-/*     assert(who != NULL); */
-
-/*     free(who->name); */
-/*     free(who); */
-/* } */
 
 void Person_print(struct Person who)
 {
@@ -46,8 +38,6 @@ void Person_print(struct Person who)
 
 int main(int argc, char *argv[])
 {
-    printf("sizeof(struct Person): %ld\n", sizeof(struct Person));
-
     // make two prople structures
     struct Person joe =
         Person_create("Joe Alex", 32, 64, 140);
