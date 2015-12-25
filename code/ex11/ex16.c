@@ -15,7 +15,7 @@ struct Person *Person_create(char *name, int age, int height, int weight)
 {
     struct Person *who = malloc(sizeof(struct Person));
     assert(who != NULL);
-    
+
     who->name = strdup(name);
     who->age = age;
     who->height = height;
@@ -42,8 +42,6 @@ void Person_print(struct Person *who)
 
 int main(int argc, char *argv[])
 {
-    printf("sizeof(struct Person): %ld\n", sizeof(struct Person));
-
     // make two prople structures
     struct Person *joe =
         Person_create("Joe Alex", 32, 64, 140);
