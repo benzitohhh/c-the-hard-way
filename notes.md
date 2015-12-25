@@ -1,3 +1,8 @@
+TODO:
+install valgrind (see chapter 4)
+lookup how to create structs on the stack
+
+
 Emacs
 *********
 In dired mode, to duplicate a directory...
@@ -17,8 +22,6 @@ In general... stdio.h should be found in:
 
 Implementation may differ. An example implementation can be found in the GNU C Library:
 http://www.gnu.org/software/libc/download.html
-
-TODO: install valgrind (see chapter 4)
 
 Strings are just arrays of chars.
 The following are equivalent:
@@ -60,3 +63,7 @@ For nearly everything else you see people use pointers, they should be using arr
 
 Pointers Are Not Arrays
 No matter what, you should never think that pointers and arrays are the same thing. They are not the same thing, even though C lets you work with them in many of the same ways. For example, if you do sizeof(cur_age) in the code above, you would get the size of the pointer, not the size of what it points at. If you want the size of the full array, you have to use the array's name, age as I did on line 12.
+
+The memory location of a struct is a long.
+But you can printf it with %p
+I.e.    printf("location of myPointer: %p", myPointer);
