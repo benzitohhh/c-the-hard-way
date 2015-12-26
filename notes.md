@@ -14,6 +14,15 @@ In C-mode, to compile and run:
                 ;;   make clean; make ex5; echo; ./ex5;
                 ;; On subsequent executions, this will be the default
 
+To generate tags table:
+
+     For a single file:
+        ctags -a -e -f TAGS someFile.c;
+
+     For multiple files:
+        find . -name "*.c" | xargs ctags -a -e -f TAGS ;
+
+
 C
 *******
 

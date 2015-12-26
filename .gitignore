@@ -1,2 +1,10 @@
+#### Ignore all files with no extension
+*
+!/**/
+!*.*
+#######################################
+
 .DS_STORE
 book
+*.exe
+*~

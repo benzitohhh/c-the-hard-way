@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <string.h>
 
-#define MAX_DATA 512
+#define MAX_DATA 512  // create a constant using the C preprocessor. It's the most reliable way of creating a constant.
 #define MAX_ROWS 100
 
 struct Address
@@ -14,13 +14,15 @@ struct Address
     char name[MAX_DATA]; // array is created within the struct
     char email[MAX_DATA];
     // i.e. so this struct is 1032 bytes
+    // It is a fixed size struct - less efficient, but easier to store and read.
 };
 
 struct Database
 {
     struct Address rows[MAX_ROWS];
     // Again struct contains an array (rather than a pointer to an array).
-    // So the size is 103,200 bytes
+    // So again, it's a fixed size (less efficient, but we can write it to disk in one go).
+    // Size here is 103,200 bytes
 };
 
 struct Connection
