@@ -1,6 +1,5 @@
 TODO:
 install valgrind (see chapter 4)
-lookup how to create structs on the stack
 
 
 Emacs
@@ -16,11 +15,9 @@ In C-mode, to compile and run:
 
 To generate tags table:
 
-     For a single file:
-        ctags -a -e -f TAGS someFile.c;
+    ctags -e -R   ;; i.e. this works fine for C (outputs file TAGS)
+                  ;; you can also run this in /usr/include/ (to get tags table for stdio.h and friends)
 
-     For multiple files:
-        find . -name "*.c" | xargs ctags -a -e -f TAGS ;
 
 
 C

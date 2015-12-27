@@ -7,5 +7,7 @@
 .DS_STORE
 book
 *.exe
+*.o
 *~
 *.stackdump
+TAGS
