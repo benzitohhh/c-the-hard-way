@@ -62,6 +62,7 @@ void *Object_new(size_t size, Object proto, char *description)
         return NULL;
     } else {
         // all done, we made an object of any type
+        assert(el != NULL);
         return el;
     }
 }
