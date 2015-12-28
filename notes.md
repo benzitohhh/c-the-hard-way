@@ -23,11 +23,19 @@ To generate tags table:
 C
 *******
 
-In general... stdio.h should be found in:
-/usr/include
+   /usr/include   should contain the standard library header files (i.e. stdio.h etc)
 
-Implementation may differ. An example implementation can be found in the GNU C Library:
-http://www.gnu.org/software/libc/download.html
+   /usr/lib       should contain the the standard library implementations.
+
+   Static libaries have .a extension (i.e. libc.a, libm.a etc).
+   They are a collection of .o files (object files), grouped together
+   using the ar archiver utility.
+
+   Dynamic libaries have .so extension (i.e. libc.so, etc...).
+
+   You can see which libraries have been dynamically linked by running:
+      ldd <executable>
+
 
 Strings are just arrays of chars.
 The following are equivalent:
