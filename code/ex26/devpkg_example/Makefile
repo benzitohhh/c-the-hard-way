@@ -1,9 +1,14 @@
 PREFIX?=/usr/local
-#CFLAGS=-g -Wall -I${PREFIX}/apr/include/apr-1 -I${PREFIX}/apr/include/apr-util-1
-CFLAGS=-g -Wall -I/usr/include/apr-1 -I/usr/include/apr-util-1
-#LDFLAGS=-L${PREFIX}/apr/lib -lapr-1 -pthread -laprutil-1
+
+## Cygwin:
+#CFLAGS=-g -Wall -I/usr/include/apr-1 -I/usr/include/apr-util-1
+#LDLIBS=-lapr-1 -pthread -laprutil-1
+
+## OSX/linux:
+CFLAGS=-g -Wall -I${PREFIX}/apr/include/apr-1 -I${PREFIX}/apr/include/apr-util-1
+LDFLAGS=-L${PREFIX}/apr/lib -lapr-1 -pthread -laprutil-1
 #LDFLAGS=-lapr-1 -pthread -laprutil-1
-LDLIBS=-lapr-1 -pthread -laprutil-1
+#LDLIBS=-lapr-1 -pthread -laprutil-1
 
 all: devpkg
 
