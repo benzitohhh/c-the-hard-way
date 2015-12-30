@@ -9,7 +9,7 @@ In dired mode, to duplicate a directory...
 
 In C-mode, to compile and run:
 
-    S-Return    ;; First time this runs, give it a command, i.e.:
+    M-Return    ;; First time this runs, give it a command, i.e.:
                 ;;   make clean; make ex5; echo; ./ex5;
                 ;; On subsequent executions, this will be the default
 
@@ -25,7 +25,7 @@ C
 
    Libraries:
 
-      Libraries are a bunch of object files, grouped together in a single file.
+      Libraries are a bunch of object files, grouped together in a single file, often by using the ar archiver tool.
 
       /usr/lib       contains the standard libraries (i.e. libc.so, libc.a, libc.dylib etc..)
 
@@ -33,7 +33,7 @@ C
 
       Static libaries have .a extension (i.e. libc.a, libm.a etc).
 
-      Dynamic libaries have .so extension or .dylib on OSX (i.e. libc.so, libc.dylib etc..)
+      Dynamic libaries have .so extension (unix), .dylib (OSX), or .dll (Windows) i.e. libc.so, libc.dylib etc..
 
       You can see which libraries have been dynamically linked by running:
          ldd <executable>        # on Linux
