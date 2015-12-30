@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "db.h"
 #include "commands.h"
 
-int main(int argc, const char const *argv[])
+int main(int argc, const char *argv[])
 {
 	apr_pool_t *p = NULL;
 	apr_pool_initialize();
