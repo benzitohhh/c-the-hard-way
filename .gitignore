@@ -15,3 +15,5 @@ book
 TAGS
 *.dSYM
 *.so
+*.a
+*.log
