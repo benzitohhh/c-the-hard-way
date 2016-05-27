@@ -2,6 +2,15 @@ TODO:
 install valgrind (see chapter 4)
 
 
+To compile a file
+*****************
+gcc ex1.c
+
+
+To view assembly (i.e. just run processor and compile to assembler):
+gcc -S ex1.c
+
+
 Emacs
 *********
 In dired mode, to duplicate a directory...
@@ -38,6 +47,10 @@ C
       You can see which libraries have been dynamically linked by running:
          ldd <executable>        # on Linux
          otool -L <executable>   # on OSX
+
+
+Good explanation of pointers:
+http://nuclear.mutantstargoat.com/articles/pointers_explained.pdf
 
 
 Strings are just arrays of chars.
