@@ -1,99 +1,157 @@
-TODO:
-install valgrind (see chapter 4)
+# C notes
 
 
-To compile a file
-*****************
-gcc ex1.c
-
+## To compile a file
+```
+CFLAGS -Wall gcc ex1.c
+```
+The -W flag is for warnings, so -Wall is all warnings.
+See man gcc for more information.
 
 To view assembly (i.e. just run processor and compile to assembler):
+```
 gcc -S ex1.c
+```
 
+## Emacs
 
-Emacs
-*********
 In dired mode, to duplicate a directory...
+
+```
     C     ;; to copy it, then specify a new name
+```
 
 In C-mode, to compile and run:
 
+```
     M-Return    ;; First time this runs, give it a command, i.e.:
                 ;;   make clean; make ex5; echo; ./ex5;
                 ;; On subsequent executions, this will be the default
+```
 
 To generate tags table:
 
+```
     ctags -e -R   ;; i.e. this works fine for C (outputs file TAGS)
                   ;; you can also run this in /usr/include/ (to get tags table for stdio.h and friends)
+```
 
+## Libraries
 
+Libraries are a bunch of object files, grouped together in a single file, often by using the ar archiver tool.
 
-C
-*******
+`/usr/lib` contains the standard libraries (i.e. libc.so, libc.a, libc.dylib etc..).
 
-   Libraries:
+`/usr/include` contains header files for the standrad libraries (i.e. stdio.h etc).
 
-      Libraries are a bunch of object files, grouped together in a single file, often by using the ar archiver tool.
+Static libaries have `.a` extension (i.e. libc.a, libm.a etc).
 
-      /usr/lib       contains the standard libraries (i.e. libc.so, libc.a, libc.dylib etc..)
+Dynamic libaries have .so extension (unix), .dylib (OSX), or .dll (Windows) i.e. libc.so, libc.dylib etc..
 
-      /usr/include   contains header files for the standrad libraries (i.e. stdio.h etc)
-
-      Static libaries have .a extension (i.e. libc.a, libm.a etc).
-
-      Dynamic libaries have .so extension (unix), .dylib (OSX), or .dll (Windows) i.e. libc.so, libc.dylib etc..
-
-      You can see which libraries have been dynamically linked by running:
+You can see which libraries have been dynamically linked by running:
+```
          ldd <executable>        # on Linux
          otool -L <executable>   # on OSX
+```
 
+## Pointers
 
 Good explanation of pointers:
 http://nuclear.mutantstargoat.com/articles/pointers_explained.pdf
 
+Consider some file `ex5.c`
+```
+int main(int argc, char *argv[])
+{
+    // stuff here
+}
+```
 
-Strings are just arrays of chars.
-The following are equivalent:
+Suppose we call `./ex5 yay oh yes`, when main enters the memory might look
+something like this:
 
-   char *myString = "yay";
-   char[] myString = {'y', 'a', 'y', '\0'}; // notice the nul_byte at the end
+| Symbol     | Address | Value  |
+|------------|---------|--------|
+| argv       | 0x7a70  | 0x7ab0 |
+| argv[0]    | 0x7ab0  | 0x7bb0 |
+| argv[1]    | 0x7ab8  | 0x7bb6 |
+| argv[2]    | 0x7ac0  | 0x7bba |
+| argv[3]    | 0x7ac8  | 0x7bbd |
+| argv[0][0] | 0x7bb0  | .      |
+| argv[0][1] | 0x7bb1  | /      |
+| argv[0][2] | 0x7bb2  | e      |
+| argv[0][3] | 0x7bb3  | x      |
+| argv[0][4] | 0x7bb4  | 5      |
+| argv[0][5] | 0x7bb5  | \0     |
+| argv[1][0] | 0x7bb6  | y      |
+| argv[1][1] | 0x7bb7  | a      |
+| argv[1][2] | 0x7bb8  | y      |
+| argv[1][3] | 0x7bb9  | \0     |
+| argv[2][0] | 0x7bba  | o      |
+| argv[2][1] | 0x7bbb  | h      |
+| argv[2][2] | 0x7bbc  | \0     |
+| argv[3][0] | 0x7bbd  | y      |
+| argv[3][1] | 0x7bbe  | e      |
+| argv[3][2] | 0x7bbf  | s      |
+| argv[3][3] | 0x7bc0  | \0     |
 
-C treats the computer's memory as one big array.
-A pointer is a memory address, with a type specifier.
-You can increment/decrement a pointer.
-You can use array index notation to get/set values (i.e. pointer[1] = 5).
-A pointer gives you raw, direct access to a block of memory.
+Notice how `argv` is a pointer. It points to a bunch of pointers, where each in turn points to a bunch of chars.
 
-There are four primary useful things you do with pointers in C code:
-1. Ask the OS for a chunk of memory and use a pointer to work with it. This includes strings and something you haven't seen yet, structs.
-2. Passing large blocks of memory (like large structs) to functions with a pointer so you don't have to pass the whole thing to them.
-3. Taking the address of a function so you can use it as a dynamic callback.
-4. Complex scanning of chunks of memory such as converting bytes off a network socket into data structures or parsing files.
+Notice how each pointer takes up 8 bytes of memory.
 
-For nearly everything else you see people use pointers, they should be using arrays. In the early days of C programming people used pointers to speed up their programs because the compilers were really bad at optimizing array usage. These days the syntax to access an array vs. a pointer are translated into the same machine code and optimized the same, so it's not as necessary. Instead, you go with arrays every time you can, and then only use pointers as a performance optimization if you absolutely have to.
+And how the chars are layed out in a contiguous block of memory (b0 to bf)
 
-    type *ptr
-        "a pointer of type named ptr"
 
-    *ptr
-        "the value of whatever ptr is pointed at"
+## Stack/heap
 
-    *(ptr + i)
-        "the value of (whatever ptr is pointed at plus i)"
+The processor has some memory locations called registers.
 
-    &thing
-        "the address of thing"
+There are some special registers. These include the `program counter` (points to the current instruction in the main memory), `stack pointer` (points to the "top" of the stack), and `base pointer` (points to the previous point in stack just before a function was enterred).
 
-    type *ptr = &thing
-        "a pointer of type named ptr set to the address of thing"
+### Stack
 
-    ptr++
-        "increment where ptr points"
+The stack is a continuous block of memory set aside for the program.
 
-Pointers Are Not Arrays
-No matter what, you should never think that pointers and arrays are the same thing. They are not the same thing, even though C lets you work with them in many of the same ways. For example, if you do sizeof(cur_age) in the code above, you would get the size of the pointer, not the size of what it points at. If you want the size of the full array, you have to use the array's name, age as I did on line 12.
+"Pushing" to the stack involves moving a value from a register onto the top of the stack, and decreasing the stack pointer.
+i.e. the higher on the stack, the lower the memory address
 
-The memory location of a struct is a long.
-But you can printf it with %p
-I.e.    printf("location of myPointer: %p", myPointer);
+"Popping" the stack involves moving a value from the stack into a register, and increasing the stack pointer.
+
+Before jumping to a function's instructions, the arguments for it are pushed onto the stack. Additionally, a space is left in the stack for the return value. And the base pointer is set.
+
+When a function returns, its result is available in the stack where the caller expects it. Also the stack pointer and base pointer are reset, so that the lower addresses on the stack can be reused.
+
+All local variables in C are compiled to instructions that push onto the stack. Likewise, all function arguments are pushed onto the stack.
+
+### Heap
+
+The heap referers to memory that has been dynamically allocated, through system calls such as `malloc`, `realloc`, `calloc` and `free`.
+
+This memory must be explicitly freed after use, otherwise a memory leak occurs.
+
+
+## Structs
+
+A struct is a complex data type declaration that defines a physicallt grouped list of varaiables to be places under one name in a block of memory, allowing the different variables to be accessed via a single pointer, or the struct declared name which returns the same address.
+
+Stack and heap structs have different accessor semantics:
+
+```C
+#include <stdlib.h>
+
+struct Person {
+    int age;
+    int height;
+};
+
+int main(int argc, char *argv[])
+{
+    struct Person *p1 = malloc(8); // allocate memory in heap, get a pointer to it
+    p1->age = 23; // use the pointer to get a particular address in the heap memory, and write to it
+
+    struct Person p2; // allocate memory on stack
+    p2.age = 28; // writes to the stack
+
+    return 0;
+}
+```
