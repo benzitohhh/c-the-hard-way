@@ -5,8 +5,8 @@
 ```
 CFLAGS -Wall gcc ex1.c
 ```
-The -W flag is for warnings, so -Wall is all warnings.
-See man gcc for more information.
+The `-W` flag is for warnings, so `-Wall` means all warnings.
+See `man gcc` for more information.
 
 To view assembly (i.e. just run processor and compile to assembler):
 ```
