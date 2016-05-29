@@ -145,7 +145,7 @@ This memory must be explicitly freed after use, otherwise a memory leak occurs.
 
 A struct is a complex data type declaration that defines a physicallt grouped list of varaiables to be places under one name in a block of memory, allowing the different variables to be accessed via a single pointer, or the struct declared name which returns the same address.
 
-Stack and heap structs have different accessor semantics:
+Struct accessor semantics depends on whether using a pointer or local variable:
 
 ```C
 #include <stdlib.h>
@@ -158,10 +158,10 @@ struct Person {
 int main(int argc, char *argv[])
 {
     struct Person *p1 = malloc(8); // allocate memory in heap, get a pointer to it
-    p1->age = 23; // use the pointer to get a particular address in the heap memory, and write to it
+    p1->age = 23; // use the pointer to access a particular address in the heap memory, and write to it
 
-    struct Person p2; // allocate memory on stack
-    p2.age = 28; // writes to the stack
+    struct Person p2; // allocate memory on stack, declaring it as a local variable
+    p2.age = 28; // access this property of the local variable
 
     return 0;
 }
