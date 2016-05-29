@@ -6,12 +6,23 @@
 CFLAGS -Wall gcc ex1.c
 ```
 The `-W` flag is for warnings, so `-Wall` means all warnings.
-See `man gcc` for more information.
+See `man gcc` for more information (or man `cc` on OSX).
 
-To view assembly (i.e. just run processor and compile to assembler):
+To view assembly (i.e. just run preprocessor and compile to assembler):
 ```
 gcc -S ex1.c
 ```
+
+To view the preprocessor output
+```
+gcc -E ex1.c
+```
+
+or alternatively
+```
+cpp ex1.c
+```
+
 
 ## Emacs
 
