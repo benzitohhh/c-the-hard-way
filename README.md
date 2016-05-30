@@ -73,6 +73,8 @@ cc -Wall -g   -c -o object.o object.c
 cc -Wall -g    ex19.c object.o   -o ex19
 ```
 
+`make -k` - the `-k` flag means keep on going through errors. See `man make` for more details.
+
 ## Emacs
 
 In dired mode, to duplicate a directory...
