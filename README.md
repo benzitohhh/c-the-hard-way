@@ -23,6 +23,18 @@ or alternatively
 cpp ex1.c
 ```
 
+To output object files (outputs ex1.o, ex2.o etc... i.e. unlinked):
+
+```
+gcc -c ex1.c ex2.c
+```
+
+To link some existing object files into an executable
+
+```
+gcc -o myapp ex1.o ex2.o
+```
+
 
 ## Emacs
 
@@ -46,6 +58,45 @@ To generate tags table:
     ctags -e -R   ;; i.e. this works fine for C (outputs file TAGS)
                   ;; you can also run this in /usr/include/ (to get tags table for stdio.h and friends)
 ```
+
+
+## Object files
+
+Object files (somefile.o) just contain machine code instructions. They are not executable.
+
+To compile an object file:
+```
+gcc -c somefile.c
+```
+
+Multiple object files can be "linked" to create an executable:
+```
+gcc -o myapp somefile.o someotherfile.o
+```
+
+During the linking process, the contents of the object files will be copied into the executable.
+
+Also during linking, any references to external libraries will be "linked".
+For example printf calls (header file is in /usr/include/string.h, object file is within library in /usr/lib/libc.so)
+will be explicitly linked to.
+
+Note that to compile an object file, any external functions must be defined (otherwise the compiler does not know what to do).
+
+In C, functions can be defined and implemented seperately:
+
+```C
+// definition
+int myFunction(int a, int b);
+
+// implemention
+int myFunction(int a, int b)
+{
+  return a + b;
+}
+```
+
+Usually, definitions are put in a seperate header (.h) file. Then the header definitions can be included in any other code that wants to use them, and the implementation library can be linked once.
+
 
 ## Libraries
 
