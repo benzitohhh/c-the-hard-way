@@ -3,9 +3,10 @@
 
 ## To compile a file
 ```
-CFLAGS -Wall gcc ex1.c
+CFLAGS -Wall -g gcc ex1.c
 ```
 The `-W` flag is for warnings, so `-Wall` means all warnings.
+The `-g` flag adds debug information.
 See `man gcc` for more information (or man `cc` on OSX).
 
 To view assembly (i.e. just run preprocessor and compile to assembler):
@@ -35,6 +36,42 @@ To link some existing object files into an executable
 gcc -o myapp ex1.o ex2.o
 ```
 
+
+## Make
+
+GNU `make` command "knows" how to compile and link C files into executables.
+
+Suppose you have a very simple C program, "ex1.c". You can compile it using:
+```
+make ex1
+```
+This will generate the following call:
+```
+cc -Wall -g    ex1.c   -o ex1
+```
+
+Otherwise `make` looks for a file called `Makefile`. This file contains a bunch of task definitions (NOTE: it must be tab seperated, not spaces). For example:
+```
+CFLAGS=-Wall -g
+
+all: ex19
+
+ex19: object.o
+
+clean:
+	rm -rf ex19; \
+	rm -rf *.o;
+```
+
+In the above, runnning `make clean` will run the clean task.
+
+In the above, running `make` will run the all task, which try to make ex19. But it sees that ex19 has a dependent task object.o.
+Make looks for a corresponding .c file (make.c) and compiles it to an object file, then compiles and links ex19 using this.
+This results in the below two calls:
+```
+cc -Wall -g   -c -o object.o object.c
+cc -Wall -g    ex19.c object.o   -o ex19
+```
 
 ## Emacs
 
