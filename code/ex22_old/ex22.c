@@ -4,7 +4,7 @@
 
 int THE_SIZE = 1000;
 
-static int THE_AGE = 37; // Can only be access by code in this file
+static int THE_AGE = 37;
 
 int get_age()
 {
@@ -18,7 +18,7 @@ void set_age(int age)
 
 double update_ratio(double new_ratio)
 {
-    static double ratio = 1.0; // stack?
+    static double ratio = 1.0;
 
     double old_ratio = ratio;
     ratio = new_ratio;
