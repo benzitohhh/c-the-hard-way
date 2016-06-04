@@ -14,6 +14,11 @@ To view assembly (i.e. just run preprocessor and compile to assembler):
 gcc -S ex1.c
 ```
 
+To view assembly with debug symbols:
+```
+gcc -g -S ex1.c
+```
+
 To view the preprocessor output
 ```
 gcc -E ex1.c
@@ -74,6 +79,7 @@ cc -Wall -g    ex19.c object.o   -o ex19
 ```
 
 `make -k` - the `-k` flag means keep on going through errors. See `man make` for more details.
+
 
 ## Emacs
 
@@ -255,4 +261,86 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+```
+
+## Reading assembly
+
+On OSX, the following C code...
+```
+double update_ratio(double new_ratio)
+{
+    static double ratio = 1.0;
+
+    double old_ratio = ratio; // line 23
+    ratio = new_ratio;        // line 24
+
+    return old_ratio;         // line 26
+}
+```
+
+...might generate the following assembly (with debug symbols):
+```
+	.globl	_update_ratio
+	.align	4, 0x90
+_update_ratio:                          ## @update_ratio
+Lfunc_begin2:
+	.loc	1 20 0                  ## ex22.c:20:0
+	.cfi_startproc
+## BB#0:
+	pushq	%rbp
+Ltmp10:
+	.cfi_def_cfa_offset 16
+Ltmp11:
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+Ltmp12:
+	.cfi_def_cfa_register %rbp
+	movsd	%xmm0, -8(%rbp)
+	.loc	1 23 24 prologue_end    ## ex22.c:23:24
+Ltmp13:
+	movsd	_update_ratio.ratio(%rip), %xmm0 ## xmm0 = mem[0],zero
+	.loc	1 23 12 is_stmt 0       ## ex22.c:23:12
+	movsd	%xmm0, -16(%rbp)
+	.loc	1 24 13 is_stmt 1       ## ex22.c:24:13
+	movsd	-8(%rbp), %xmm0         ## xmm0 = mem[0],zero
+	.loc	1 24 11 is_stmt 0       ## ex22.c:24:11
+	movsd	%xmm0, _update_ratio.ratio(%rip)
+	.loc	1 26 12 is_stmt 1       ## ex22.c:26:12
+	movsd	-16(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	.loc	1 26 5 is_stmt 0        ## ex22.c:26:5
+	popq	%rbp
+	retq
+Ltmp14:
+Lfunc_end2:
+	.cfi_endproc
+```
+
+Notice how some C statements generate multiple assemly instructions.
+
+Also notice that the `.loc` directives preceed their assembly instructions.
+
+A simplified version of the above might be:
+
+```
+_update_ratio:
+                                               # ### // set up some stuff...
+	pushq	%rbp                               #   Push old base pointer value on to the stack
+                                               #     (this is the address to return to when this function is done)
+	movq	%rsp, %rbp                         #   Assign new base pointer value (to be the old stack pointer value)
+	movsd	%xmm0, -8(%rbp)                    #   Move xmn0 register (?) on to the stack (8 slots above the base pointer).
+
+                                               # ### double old_ratio = ratio; // line 23
+	movsd	_update_ratio.ratio(%rip), %xmm0   #   Move value "ratio" (from the data section) to register xmn0 (?),
+	movsd	%xmm0, -16(%rbp)                   #   then move it on to the stack (16 slots above the base pointer).
+                                               #   i.e. "old_ratio" now exists on the stack
+
+                                               # ### ratio = new_ratio;        // line 24
+	movsd	-8(%rbp), %xmm0                    #   Move "new_ratio" arg from the stack (8 slots above the base pointer),
+                                               #   to register xmn0,
+	movsd	%xmm0, _update_ratio.ratio(%rip)   #   then assign it to "ratio" (in the data section)
+
+                                               # ### return old_ratio;         // line 26
+	movsd	-16(%rbp), %xmm0                   #   Move "old ratio" from stack into register xmn0,
+	popq	%rbp                               #   then reset base pointer value to old base pointer value, and reset stack pointer
+	retq                                       #   jump back to previous previous base pointer instruction
 ```
