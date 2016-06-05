@@ -101,7 +101,10 @@ To generate tags table:
 
 ```
     ctags -e -R   ;; i.e. this works fine for C (outputs file TAGS)
-                  ;; you can also run this in /usr/include/ (to get tags table for stdio.h and friends)
+                  ;; you can also run this in /usr/include/ (to get tags table for stdio.h and friends),
+                  ;; although you may need to run sudo and set tmpdir i.e.
+
+    sudo TMPDIR=/tmp ctags -e -R
 ```
 
 
