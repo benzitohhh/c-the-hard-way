@@ -381,3 +381,10 @@ Then...
     p <stratement>   // to evaluate and print statements
     q                // to quit
 ```
+
+To attach `lldb` to a running process, get the pid of the process (i.e. `ps ax | grep someName`), then run `lldb` and...
+```
+    process attach -pid pid
+    // You can now set a breakpoint
+    breakpoint set -l 12
+```
