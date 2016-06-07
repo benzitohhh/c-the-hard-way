@@ -1,8 +1,8 @@
 echo "Running unit tests:"
 
-# i.e. on Windows we use .exe.... on linux/OSX remove the .exe
+# i.e. on Windows, add .exe
 
-for i in tests/*_tests.exe
+for i in tests/*_tests
 do
   echo $i
   if test -f $i
