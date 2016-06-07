@@ -347,3 +347,37 @@ _update_ratio:
 	popq	%rbp                               #   then reset base pointer value to old base pointer value, and reset stack pointer
 	retq                                       #   jump back to previous previous base pointer instruction
 ```
+
+
+## debugging on OSX
+
+`gdb` is not installed by default.
+
+Instead, you can use `lldb`
+
+To run `lldb` over some executable:
+
+```
+    lldb ./myexecutable
+```
+
+Then to set a breakpoint for a particular function:
+
+```
+    breakpoint set -n funcName
+```
+
+Or to set a breakpoint for a particular line:
+
+```
+    breakpoint set -l lineNum
+```
+
+Then...
+
+```
+    run              // to run
+    n                // to step to next line
+    p <stratement>   // to evaluate and print statements
+    q                // to quit
+```
