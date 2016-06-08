@@ -29,7 +29,7 @@ void DArray_clear(DArray * array)
     if (array->element_size > 0) {
         for (i = 0; i < array->max; i++) {
             if (array->contents[i] != NULL) {
-                free(array->contents[i]);
+                free(array->contents[i]); // just wipe the pointed-to value (pointer will still be there)
             }
         }
     }
@@ -60,7 +60,7 @@ int DArray_expand(DArray * array)
             "Failed to expand array to new size: %d",
             array->max + (int)array->expand_rate);
 
-    memset(array->contents + old_max, 0, array->expand_rate + 1);
+    memset(array->contents + old_max, 0, array->expand_rate + 1); // write (expand_rate + 1) 0s, starting at index old_max
     return 0;
 
 error:
@@ -108,6 +108,11 @@ void *DArray_pop(DArray * array)
 
     void *el = DArray_remove(array, array->end - 1);
     array->end--;
+
+    // So... we invoke contract() most of the time.
+    // But we don't if either:
+    // a) end is less than expand_rate (as would be less than 0)
+    // b) end is an integer multiple of expand_rate (why????)
 
     if (DArray_end(array) > (int)array->expand_rate
             && DArray_end(array) % array->expand_rate) {

@@ -7,7 +7,7 @@
 typedef struct DArray {
     int end;
     int max;
-    size_t element_size;
+    size_t element_size; // size_t is an unsigned integer type, guaranteed to hold any array index
     size_t expand_rate;
     void **contents;
 } DArray;
