@@ -9,18 +9,18 @@ int DArray_qsort(DArray *array, DArray_compare cmp)
 
 int DArray_heapsort(DArray *array, DArray_compare cmp)
 {
-    // return heapsort(array->contents, DArray_count(array), sizeof(void *), cmp);
+    return heapsort(array->contents, DArray_count(array), sizeof(void *), cmp);
 
     // argghhgg heapsort missing from cygwins stdlib, so just use qsort for now...
-    qsort(array->contents, DArray_count(array), sizeof(void *), cmp);
-    return 0;
+    //qsort(array->contents, DArray_count(array), sizeof(void *), cmp);
+    //return 0;
 }
 
 int DArray_mergesort(DArray *array, DArray_compare cmp)
 {
-    // return mergesort(array->contents, DArray_count(array), sizeof(void *), cmp);
+    return mergesort(array->contents, DArray_count(array), sizeof(void *), cmp);
 
     // argghhgg heapsort missing from cygwins stdlib, so just use qsort for now...
-    qsort(array->contents, DArray_count(array), sizeof(void *), cmp);
-    return 0;
+    //qsort(array->contents, DArray_count(array), sizeof(void *), cmp);
+    //return 0;
 }
