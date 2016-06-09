@@ -1848,7 +1848,7 @@ static int test23_aux_splitcb(void *parm, int ofs,
         const struct tagbstring *entry)
 {
     bstring b = (bstring) parm;
-    ofs = ofs;
+    (void)ofs; // dumb line to stop compile warning
     if (b->slen > 0)
         bconchar(b, (char)'|');
     bconcat(b, entry);
@@ -1864,7 +1864,7 @@ static int test23_aux_splitcbx(void *parm, int ofs,
         const struct tagbstring *entry)
 {
     struct tagBss *p = (struct tagBss *)parm;
-    ofs = ofs;
+    (void)ofs; // dumb line to stop compile warning
     if (!p->first) {
         bconchar(p->b, (char)p->sc);
     } else
@@ -3583,8 +3583,8 @@ int main(int argc, char *argv[])
     FILE * log_file = fopen("tests/bstr_tests.c", "a+");
     setbuf(log_file, NULL);
     int ret = 0;
-    argc = argc;
-    argv = argv;
+    (void)argc; // prevent compiler warning
+    (void)argv; // prevent compiler warning
     debug("Direct case testing of bstring core functions");
     ret += test0();
     ret += test1();
