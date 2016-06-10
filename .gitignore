@@ -18,3 +18,4 @@ TAGS
 *.a
 *.log
 *.s
+.dir-locals.el
