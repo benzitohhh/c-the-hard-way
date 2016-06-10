@@ -57,7 +57,7 @@ int read_some(RingBuffer *buffer, int fd, int is_socket)
     int rc = 0;
 
     if(RingBuffer_available_data(buffer) == 0) {
-        buffer->start = buffer->end = 0;
+        buffer->start = buffer->end = 0; // reset buffer
     }
 
     if(is_socket) {
@@ -101,14 +101,23 @@ error:
 }
 
 
+// To run this:
+//
+//   ./bin/netclient c.learncodethehardway.org 80
+//
+// Then type the below two lines (with a return after)
+//
+//     GET /ex45.txt HTTP/1.1
+//     Host: learncodethehardway.org
+
 int main(int argc, char *argv[])
 {
-    fd_set allreads;
-    fd_set readmask;
+    fd_set allreads; // ????
+    fd_set readmask; // ????
 
-    int socket = 0;
+    int socket = 0;  // a file descriptor
     int rc = 0;
-    RingBuffer *in_rb = RingBuffer_create(1024 * 10);
+    RingBuffer *in_rb   = RingBuffer_create(1024 * 10);
     RingBuffer *sock_rb = RingBuffer_create(1024 * 10);
 
     check(argc == 3, "USAGE: netclient host port");
@@ -116,31 +125,41 @@ int main(int argc, char *argv[])
     socket = client_connect(argv[1], argv[2]);
     check(socket >= 0, "connect to %s:%s failed.", argv[1], argv[2]);
 
-    FD_ZERO(&allreads);
-    FD_SET(socket, &allreads);
-    FD_SET(0, &allreads);
+    FD_ZERO(&allreads);        // ??
+    FD_SET(socket, &allreads); // ??
+    FD_SET(0, &allreads);      // ??
 
     while(1) {
+        printf("\nMAIN LOOP>>>>\n");
+
         readmask = allreads;
-        rc = select(socket + 1, &readmask, NULL, NULL, NULL);
+        rc = select(socket + 1, &readmask, NULL, NULL, NULL); // seems like this blocks. But what does it actually do?????
         check(rc >= 0, "select failed.");
 
         if(FD_ISSET(0, &readmask)) {
-            rc = read_some(in_rb, 0, 0);
+            // READ from stdin (fd=0) -> into buffer in_rb
+            printf("\nread from stdin, into in_rb\n");
+            rc = read_some(in_rb, 0 /* stdin */, 0);
             check_debug(rc != -1, "Failed to read from stdin.");
         }
 
         if(FD_ISSET(socket, &readmask)) {
+            // READ from socket -> into buffer sock_rb
+            printf("\nread from socket, into sock_rb\n");
             rc = read_some(sock_rb, socket, 0);
             check_debug(rc != -1, "Failed to read from socket.");
         }
 
         while(!RingBuffer_empty(sock_rb)) {
+            // WRITE to stdout (fd=1) <- from buffer sock_rb
+            printf("\nread to stdout, from sock_rb\n");
             rc = write_some(sock_rb, 1, 0);
             check_debug(rc != -1, "Failed to write to stdout.");
         }
 
         while(!RingBuffer_empty(in_rb)) {
+            // WRITE to socket <- from buffer in_rb
+            printf("\nread to socket, from in_rb\n");
             rc = write_some(in_rb, socket, 1);
             check_debug(rc != -1, "Failed to write to socket.");
         }
