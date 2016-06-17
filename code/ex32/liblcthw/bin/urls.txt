@@ -1,0 +1,4 @@
+index myIndexAction
+about myAboutAction
+contact myContactAction
+context myContextAction
