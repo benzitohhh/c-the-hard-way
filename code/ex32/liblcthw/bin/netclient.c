@@ -130,36 +130,30 @@ int main(int argc, char *argv[])
     FD_SET(0, &allreads);      // ??
 
     while(1) {
-        printf("\nMAIN LOOP>>>>\n");
-
         readmask = allreads;
         rc = select(socket + 1, &readmask, NULL, NULL, NULL); // seems like this blocks. But what does it actually do?????
         check(rc >= 0, "select failed.");
 
         if(FD_ISSET(0, &readmask)) {
             // READ from stdin (fd=0) -> into buffer in_rb
-            printf("\nread from stdin, into in_rb\n");
             rc = read_some(in_rb, 0 /* stdin */, 0);
             check_debug(rc != -1, "Failed to read from stdin.");
         }
 
         if(FD_ISSET(socket, &readmask)) {
             // READ from socket -> into buffer sock_rb
-            printf("\nread from socket, into sock_rb\n");
             rc = read_some(sock_rb, socket, 0);
             check_debug(rc != -1, "Failed to read from socket.");
         }
 
         while(!RingBuffer_empty(sock_rb)) {
             // WRITE to stdout (fd=1) <- from buffer sock_rb
-            printf("\nread to stdout, from sock_rb\n");
             rc = write_some(sock_rb, 1, 0);
             check_debug(rc != -1, "Failed to write to stdout.");
         }
 
         while(!RingBuffer_empty(in_rb)) {
             // WRITE to socket <- from buffer in_rb
-            printf("\nread to socket, from in_rb\n");
             rc = write_some(in_rb, socket, 1);
             check_debug(rc != -1, "Failed to write to socket.");
         }
